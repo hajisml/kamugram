@@ -1,11 +1,36 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from src.database import Word, Definition, Synonym, Example
+from src.services.scraper_service import ScraperService
+from src.services.ai_service import AIService
 from typing import List, Optional, Dict
 
 class DictionaryService:
     def __init__(self, db: Session):
         self.db = db
+        self.scraper = ScraperService()
+        self.ai = AIService()
+
+    async def get_definition(self, word_text: str) -> Optional[Dict]:
+        """
+        The "Brain" of the bot: Fallthrough logic.
+        """
+        # Level 1: Local Database
+        result = await self.search_local(word_text)
+        if result:
+            return result
+            
+        # Level 2: Wiktionary Scraper
+        result = await self.scraper.fetch_wiktionary(word_text)
+        if result:
+            return result
+            
+        # Level 3: AI Inference
+        result = await self.ai.get_contextual_definition(word_text)
+        if result:
+            return result
+            
+        return None
 
     async def search_local(self, word_text: str) -> Optional[Dict]:
         """
