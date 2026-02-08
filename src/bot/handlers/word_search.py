@@ -45,3 +45,38 @@ async def handle_tts(callback: CallbackQuery):
     await callback.message.answer_voice(audio, caption=f"Sauti ya neno: {word}")
     if os.path.exists(filename):
         os.remove(filename)
+
+@router.callback_query(F.data.startswith("synonyms:"))
+async def handle_synonyms(callback: CallbackQuery):
+    word = callback.data.split(":")[1]
+    db = SessionLocal()
+    service = DictionaryService(db)
+    data = await service.get_definition(word)
+    db.close()
+    if not data or not data.get('synonyms'):
+        await callback.answer("Hakuna visawe.")
+        return
+    text = f"Visawe vya {word}: " + ", ".join(data['synonyms'])
+    await callback.message.edit_text(text, reply_markup=get_word_actions_keyboard(word, True, bool(data.get('examples'))))
+
+@router.callback_query(F.data.startswith("examples:"))
+async def handle_examples(callback: CallbackQuery):
+    word = callback.data.split(":")[1]
+    db = SessionLocal()
+    service = DictionaryService(db)
+    data = await service.get_definition(word)
+    db.close()
+    if not data or not data.get('examples'):
+        await callback.answer("Hakuna mifano.")
+        return
+    text = f"Mifano ya {word}: \n" + "\n".join([f"• {e['sw']}" for e in data['examples']])
+    await callback.message.edit_text(text, reply_markup=get_word_actions_keyboard(word, bool(data.get('synonyms')), True))
+
+@router.callback_query(F.data.startswith("meaning:"))
+async def handle_meaning(callback: CallbackQuery):
+    word = callback.data.split(":")[1]
+    db = SessionLocal()
+    service = DictionaryService(db)
+    data = await service.get_definition(word)
+    db.close()
+    await callback.message.edit_text(f"Maana ya {data['word']}: \n" + "\n".join(data['definitions']), reply_markup=get_word_actions_keyboard(word, bool(data.get('synonyms')), bool(data.get('examples'))))
