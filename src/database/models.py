@@ -10,6 +10,7 @@ class Word(Base):
     id = Column(Integer, primary_key=True)
     word = Column(String(255), unique=True, nullable=False, index=True)
     noun_class = Column(String(50), nullable=True)  # Swahili Ngeli
+    conjugation = Column(Text, nullable=True) # Added field
     
     definitions = relationship("Definition", back_populates="word_obj")
     synonyms = relationship("Synonym", back_populates="word_obj")

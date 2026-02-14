@@ -17,10 +17,12 @@ def seed_data(json_path: str):
     print(f"Seeding {total} entries...")
     
     for entry_id, entry in data.items():
-        word_text = entry.get("Word", "").strip()
-        meaning_text = entry.get("Meaning", "").strip()
-        synonyms_text = entry.get("Synonyms", "")
-        conjugation_text = entry.get("Conjugation", "")
+        if entry is None:
+            continue
+        word_text = (entry.get("Word") or "").strip()
+        meaning_text = (entry.get("Meaning") or "").strip()
+        synonyms_text = (entry.get("Synonyms") or "")
+        conjugation_text = (entry.get("Conjugation") or "")
         
         if not word_text:
             continue
@@ -30,7 +32,8 @@ def seed_data(json_path: str):
         
         if not word_obj:
             word_obj = Word(
-                word=word_text
+                word=word_text,
+                conjugation=conjugation_text
             )
             db.add(word_obj)
             db.flush() # Get ID
