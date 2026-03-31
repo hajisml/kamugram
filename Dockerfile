@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM python:3.11-slim AS builder
+FROM docker.io/library/python:3.11-slim AS builder
 
 # Install uv for fast dependency management
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -12,7 +12,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 
 # Stage 2: Runtime
-FROM python:3.11-slim
+FROM docker.io/library/python:3.11-slim
 
 # Set working directory
 WORKDIR /app

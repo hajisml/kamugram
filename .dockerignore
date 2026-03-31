@@ -24,5 +24,3 @@ data/
 # Tools
 .mise.toml
 Makefile
-uv.lock
-EOF
