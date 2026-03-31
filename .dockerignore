@@ -1,0 +1,28 @@
+# Git
+.git
+.gitignore
+
+# Spec
+spec/
+natural_development.md
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env
+.pytest_cache/
+.ruff_cache/
+
+# Data
+*.db
+*.log
+data/
+
+# Tools
+.mise.toml
+Makefile
+uv.lock
+EOF

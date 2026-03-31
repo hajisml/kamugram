@@ -6,7 +6,7 @@ from .models import Base
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./kamugram.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/kamugram.db")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

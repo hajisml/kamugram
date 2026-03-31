@@ -1,0 +1,25 @@
+services:
+  kamugram-bot:
+    build: .
+    container_name: kamugram-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=sqlite:///./data/kamugram.db
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - kamugram_data:/app/data
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: kamugram-redis
+    restart: unless-stopped
+    volumes:
+      - redis_cache:/data
+
+volumes:
+  kamugram_data:
+  redis_cache:
