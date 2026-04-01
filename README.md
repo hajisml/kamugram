@@ -1,4 +1,4 @@
-# Kamugram (@kamugrambot)
+# Kamugram ([@KamugramBot](https://t.me/KamugramBot))
 
 A robust, hybrid Swahili Dictionary Telegram Bot that combines local high-speed data with real-time web scraping and AI inference.
 
